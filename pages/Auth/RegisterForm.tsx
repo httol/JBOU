@@ -4,6 +4,10 @@ import { ButtonBaseCss } from "../styles";
 import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 import TextField from "../components/TextField";
+import Box from "../components/Box";
+import Button from "../components/Button";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../config/firebase";
 
 export default function RegisterForm({
   onLogin,
@@ -26,23 +30,36 @@ export default function RegisterForm({
       confirm_password: "",
     },
     validationSchema: newSchema,
-    onSubmit: (values, { setErrors }) => {
+    onSubmit: async (values, { setErrors, setSubmitting }) => {
       console.log(values);
+      try {
+        setSubmitting(true);
+        const user = await createUserWithEmailAndPassword(
+          auth,
+          values.email,
+          values.password
+        );
+        console.log(user);
+        setSubmitting(false);
+      } catch (err) {
+        setSubmitting(false);
+        console.log(err);
+      }
     },
   });
 
-  const { getFieldProps } = formik;
+  const { getFieldProps, errors, touched, isSubmitting } = formik;
 
   return (
-    <div
-      className={`absolute flex w-full translate-x-[${
-        active ? 480 : 0
-      }px] flex-col  justify-center px-10 transition-transform duration-200 ease-linear`}
+    <Box
+      className={`absolute flex w-full ${
+        active ? "scale-1 translate-x-0" : "translate-x-[480px] scale-0"
+      } flex-col justify-center px-10 transition-all duration-200 ease-linear`}
     >
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate className="h-auto">
           <div className="mb-1 text-3xl font-semibold">Sign up</div>
-          <div className="mb-12 flex items-center justify-between">
+          <div className="mb-6 flex items-center justify-between">
             <span>
               Already have an account? &nbsp;
               <Link
@@ -66,28 +83,31 @@ export default function RegisterForm({
           <TextField
             type="email"
             placeholder="Email"
-            className="-inset-1 w-full rounded-md border  border-slate-200 bg-transparent p-3 "
             {...getFieldProps("email")}
             DIVProps={{ className: "mb-4" }}
+            errors={Boolean(touched.password && errors.password)}
+            helperText={touched.password && errors.password}
           />
           <TextField
             type="password"
             placeholder="Password"
-            className="-inset-1  w-full rounded-md  border border-slate-200 bg-transparent p-3"
             {...getFieldProps("password")}
             DIVProps={{ className: "mb-4" }}
+            errors={Boolean(touched.password && errors.password)}
+            helperText={touched.password && errors.password}
           />
           <TextField
             type="password"
             placeholder="Confirm Password"
-            className="-inset-1  w-full rounded-md  border border-slate-200 bg-transparent p-3"
             {...getFieldProps("confirm_password")}
+            errors={Boolean(touched.password && errors.password)}
+            helperText={touched.password && errors.password}
           />
-          <button onClick={() => {}} className={`${ButtonBaseCss} mt-4 w-full`}>
+          <Button type="submit" loading={isSubmitting}>
             Register
-          </button>
+          </Button>
         </Form>
       </FormikProvider>
-    </div>
+    </Box>
   );
 }

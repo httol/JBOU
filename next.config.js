@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  compiler: {
+    // Warning: Prop `className` did not match. Server
+    // compatible with styled-components
+    styledComponents: true,
+  },
   reactStrictMode: true,
   images: {
     dangerouslyAllowSVG: true,

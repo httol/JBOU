@@ -4,6 +4,13 @@ import * as Yup from "yup";
 import { ButtonBaseCss } from "../styles";
 import { Form, FormikProvider, useFormik } from "formik";
 import TextField from "../components/TextField";
+import styled from "styled-components";
+import Box from "../components/Box";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../config/firebase";
+import Button from "../components/Button";
+
+const StyledBox = styled(Box)``;
 
 export default function LoginForm({
   onRegister,
@@ -24,23 +31,35 @@ export default function LoginForm({
       password: "",
     },
     validationSchema: newSchema,
-    onSubmit: (values, { setErrors }) => {
-      console.log(values);
+    onSubmit: async (values, { setErrors, setSubmitting }) => {
+      try {
+        setSubmitting(true);
+        const user = await signInWithEmailAndPassword(
+          auth,
+          values.email,
+          values.password
+        );
+        console.log(user);
+        setSubmitting(false);
+      } catch (err) {
+        setSubmitting(false);
+        console.log(err);
+      }
     },
   });
 
-  const { getFieldProps } = formik;
+  const { getFieldProps, isSubmitting } = formik;
 
   return (
-    <div
-      className={`flex flex-1 -translate-x-[${
-        active ? 0 : 480
-      }px] flex-col justify-center px-10 transition-transform duration-200 ease-linear`}
+    <StyledBox
+      className={`flex flex-1 ${
+        active ? "scale-1 translate-x-0" : "-translate-x-[480px] scale-0"
+      } flex-col justify-center px-10 transition-transform duration-200 ease-linear`}
     >
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate>
           <div className="mb-1 text-3xl font-semibold">Sign in to XXX</div>
-          <div className="mb-12 flex items-center justify-between">
+          <div className="mb-6 flex items-center justify-between">
             <span>
               New user? &nbsp;
               <Link
@@ -74,15 +93,14 @@ export default function LoginForm({
             type="password"
             placeholder="Password"
             autoComplete="off"
-            className="-inset-1  w-full rounded-md  border border-slate-200 bg-transparent p-3"
             {...getFieldProps("password")}
           />
 
-          <button type="submit" className={`${ButtonBaseCss} mt-4 w-full`}>
+          <Button type="submit" loading={isSubmitting}>
             Login
-          </button>
+          </Button>
         </Form>
       </FormikProvider>
-    </div>
+    </StyledBox>
   );
 }
