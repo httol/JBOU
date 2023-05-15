@@ -2,6 +2,20 @@
 Here we go
 https://jbou-sxhe.vercel.app/
 
+# Features
+* Firebase email/password authentication
+* Google (comming soon)
+* Facebook (comming soon)
+* Phone (comming soon)
+* Apple (comming soon)
+* Github (comming soon)
+* Anonymous (comming soon)
+* Microsoft (comming soon)
+* Twitter (comming soon)
+* Yahoo (comming soon)
+* Google calendar (comming soon)
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
