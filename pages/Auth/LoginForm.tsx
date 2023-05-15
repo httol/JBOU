@@ -24,7 +24,7 @@ export default function LoginForm({
   const toaster = useToaster();
   const [errorMessage, setErrorMessage] = useState("");
   const newSchema = Yup.object().shape({
-    email: Yup.string().required("Email is required"),
+    email: Yup.string().email("Email is invalid").required("Email is required"),
     password: Yup.string().required("Password is required"),
   });
 
@@ -93,8 +93,8 @@ export default function LoginForm({
             autoComplete="off"
             {...getFieldProps("email")}
             DIVProps={{ className: "mb-4" }}
-            errors={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
+            errors={Boolean(touched.email && errors.email)}
+            helperText={touched.email && errors.email}
           />
 
           <TextField

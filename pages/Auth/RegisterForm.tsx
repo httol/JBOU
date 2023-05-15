@@ -21,7 +21,7 @@ export default function RegisterForm({
   const toaster = useToaster();
   const [errorMessage, setErrorMessage] = useState("");
   const newSchema = Yup.object().shape({
-    email: Yup.string().required("Email is required"),
+    email: Yup.string().email("Email is invalid").required("Email is required"),
     password: Yup.string().required("Password is required"),
     confirm_password: Yup.string()
       .oneOf([Yup.ref("password")], "Both password need to be the same")
