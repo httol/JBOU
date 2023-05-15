@@ -22,7 +22,7 @@ export default function LoginForm({
   active: any;
 }) {
   const toaster = useToaster();
-  const [errors, setErrors] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const newSchema = Yup.object().shape({
     email: Yup.string().required("Email is required"),
     password: Yup.string().required("Password is required"),
@@ -37,7 +37,7 @@ export default function LoginForm({
     validationSchema: newSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        setErrors("");
+        setErrorMessage("");
         setSubmitting(true);
         const user = await signInWithEmailAndPassword(
           auth,
@@ -47,14 +47,14 @@ export default function LoginForm({
         setSubmitting(false);
         toaster.success("Login successful");
       } catch (err: any) {
-        setErrors(err.message);
+        setErrorMessage(err.message);
         setSubmitting(false);
         toaster.error("Failed to login");
       }
     },
   });
 
-  const { getFieldProps, isSubmitting } = formik;
+  const { getFieldProps, isSubmitting, touched, errors } = formik;
 
   return (
     <StyledBox
@@ -93,6 +93,8 @@ export default function LoginForm({
             autoComplete="off"
             {...getFieldProps("email")}
             DIVProps={{ className: "mb-4" }}
+            errors={Boolean(touched.password && errors.password)}
+            helperText={touched.password && errors.password}
           />
 
           <TextField
@@ -100,9 +102,13 @@ export default function LoginForm({
             placeholder="Password"
             autoComplete="off"
             {...getFieldProps("password")}
+            errors={Boolean(touched.password && errors.password)}
+            helperText={touched.password && errors.password}
           />
 
-          {errors && <div className="mt-2 text-red-500">{errors}</div>}
+          {errorMessage && (
+            <div className="mt-2 text-red-500">{errorMessage}</div>
+          )}
 
           <Button type="submit" loading={isSubmitting}>
             Login
