@@ -94,8 +94,8 @@ export default function RegisterForm({
             placeholder="Email"
             {...getFieldProps("email")}
             DIVProps={{ className: "mb-4" }}
-            errors={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
+            errors={Boolean(touched.email && errors.email)}
+            helperText={touched.email && errors.email}
           />
           <TextField
             type="password"
