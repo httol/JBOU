@@ -9,6 +9,8 @@ import Box from "../components/Box";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
 import Button from "../components/Button";
+import { useState } from "react";
+import useToaster from "../hooks/useToaster";
 
 const StyledBox = styled(Box)``;
 
@@ -19,6 +21,8 @@ export default function LoginForm({
   onRegister: any;
   active: any;
 }) {
+  const toaster = useToaster();
+  const [errors, setErrors] = useState("");
   const newSchema = Yup.object().shape({
     email: Yup.string().required("Email is required"),
     password: Yup.string().required("Password is required"),
@@ -31,19 +35,21 @@ export default function LoginForm({
       password: "",
     },
     validationSchema: newSchema,
-    onSubmit: async (values, { setErrors, setSubmitting }) => {
+    onSubmit: async (values, { setSubmitting }) => {
       try {
+        setErrors("");
         setSubmitting(true);
         const user = await signInWithEmailAndPassword(
           auth,
           values.email,
           values.password
         );
-        console.log(user);
         setSubmitting(false);
-      } catch (err) {
+        toaster.success("Login successful");
+      } catch (err: any) {
+        setErrors(err.message);
         setSubmitting(false);
-        console.log(err);
+        toaster.error("Failed to login");
       }
     },
   });
@@ -58,7 +64,7 @@ export default function LoginForm({
     >
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate>
-          <div className="mb-1 text-3xl font-semibold">Sign in to XXX</div>
+          <div className="mb-1 text-3xl font-semibold">Sign in</div>
           <div className="mb-6 flex items-center justify-between">
             <span>
               New user? &nbsp;
@@ -95,6 +101,8 @@ export default function LoginForm({
             autoComplete="off"
             {...getFieldProps("password")}
           />
+
+          {errors && <div className="mt-2 text-red-500">{errors}</div>}
 
           <Button type="submit" loading={isSubmitting}>
             Login

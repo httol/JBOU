@@ -8,6 +8,8 @@ import Box from "../components/Box";
 import Button from "../components/Button";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
+import { useState } from "react";
+import useToaster from "../hooks/useToaster";
 
 export default function RegisterForm({
   onLogin,
@@ -16,10 +18,14 @@ export default function RegisterForm({
   onLogin: any;
   active: any;
 }) {
+  const toaster = useToaster();
+  const [errorMessage, setErrorMessage] = useState("");
   const newSchema = Yup.object().shape({
     email: Yup.string().required("Email is required"),
     password: Yup.string().required("Password is required"),
-    confirm_password: Yup.string().required("Password is required"),
+    confirm_password: Yup.string()
+      .oneOf([Yup.ref("password")], "Both password need to be the same")
+      .required("Password is required"),
   });
 
   const formik = useFormik({
@@ -33,6 +39,7 @@ export default function RegisterForm({
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       console.log(values);
       try {
+        setErrorMessage("");
         setSubmitting(true);
         const user = await createUserWithEmailAndPassword(
           auth,
@@ -41,9 +48,11 @@ export default function RegisterForm({
         );
         console.log(user);
         setSubmitting(false);
-      } catch (err) {
+        toaster.success("User Registered");
+      } catch (err: any) {
+        setErrorMessage(err.message);
         setSubmitting(false);
-        console.log(err);
+        toaster.error("Failed to register");
       }
     },
   });
@@ -100,9 +109,15 @@ export default function RegisterForm({
             type="password"
             placeholder="Confirm Password"
             {...getFieldProps("confirm_password")}
-            errors={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
+            errors={Boolean(
+              touched.confirm_password && errors.confirm_password
+            )}
+            helperText={touched.confirm_password && errors.confirm_password}
           />
+          {errorMessage && (
+            <div className="mt-2 text-red-500">{errorMessage}</div>
+          )}
+
           <Button type="submit" loading={isSubmitting}>
             Register
           </Button>

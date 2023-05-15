@@ -18,11 +18,11 @@ export default function Button({
       className={`${
         loading ? "bg-slate-100" : "bg-regal-blue"
       } mt-4 flex w-full rounded-md px-5 py-3 font-semibold capitalize text-white ${
-        loading ? "hover:bg-transparent" : "hover:bg-purple-700"
+        loading ? "" : "hover:bg-purple-700"
       }  ${loading ? "cursor-not-allowed" : "cursor-pointer"} ${
         loading ? "shadow-none" : "hover:shadow-lg"
       } items-center justify-center  ${others.className || ""}`}
-      disabled={disabled}
+      disabled={disabled || loading}
     >
       {loading ? (
         <svg
