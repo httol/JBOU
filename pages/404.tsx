@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ButtonBaseCss } from "./styles";
+import { ButtonBaseCss } from "../styles";
 
 export default function Error() {
   return (

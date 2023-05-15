@@ -1,16 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import * as Yup from "yup";
-import { ButtonBaseCss } from "../styles";
+import { ButtonBaseCss } from "../../styles";
 import { Form, FormikProvider, useFormik } from "formik";
-import TextField from "../components/TextField";
+import TextField from "../../components/TextField";
 import styled from "styled-components";
-import Box from "../components/Box";
+import Box from "../../components/Box";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../config/firebase";
-import Button from "../components/Button";
+import { auth } from "../../config/firebase";
+import Button from "../../components/Button";
 import { useState } from "react";
-import useToaster from "../hooks/useToaster";
+import useToaster from "../../hooks/useToaster";
 
 const StyledBox = styled(Box)``;
 

@@ -1,15 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ButtonBaseCss } from "../styles";
+import { ButtonBaseCss } from "../../styles";
 import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
-import TextField from "../components/TextField";
-import Box from "../components/Box";
-import Button from "../components/Button";
+import TextField from "../../components/TextField";
+import Box from "../../components/Box";
+import Button from "../../components/Button";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../config/firebase";
+import { auth } from "../../config/firebase";
 import { useState } from "react";
-import useToaster from "../hooks/useToaster";
+import useToaster from "../../hooks/useToaster";
 
 export default function RegisterForm({
   onLogin,
