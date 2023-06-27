@@ -22,7 +22,7 @@ export default function Login() {
       <div className="flex h-full w-full ">
         <div className=" relative hidden flex-grow flex-col items-center justify-center dark:bg-slate-800  lg:flex">
           <div className="mt-14 text-4xl font-semibold dark:text-white">
-            Hi, Welcome back
+            启明星计划
           </div>
           <IllusHome className="w-2/5 animate-pulse" />
           <div

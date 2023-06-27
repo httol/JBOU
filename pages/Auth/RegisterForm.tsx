@@ -21,11 +21,11 @@ export default function RegisterForm({
   const toaster = useToaster();
   const [errorMessage, setErrorMessage] = useState("");
   const newSchema = Yup.object().shape({
-    email: Yup.string().email("Email is invalid").required("Email is required"),
-    password: Yup.string().required("Password is required"),
+    email: Yup.string().email("邮箱不合法").required("邮箱必填"),
+    password: Yup.string().required("密码必填"),
     confirm_password: Yup.string()
-      .oneOf([Yup.ref("password")], "Both password need to be the same")
-      .required("Password is required"),
+      .oneOf([Yup.ref("password")], "密码不一致")
+      .required("确认密码必填"),
   });
 
   const formik = useFormik({
@@ -61,25 +61,24 @@ export default function RegisterForm({
 
   return (
     <Box
-      className={`absolute flex w-full ${
-        active ? "scale-1 translate-x-0" : "translate-x-[480px] scale-0"
-      } flex-col justify-center px-10 transition-all duration-200 ease-linear`}
+      className={`absolute flex w-full ${active ? "scale-1 translate-x-0" : "translate-x-[480px] scale-0"
+        } flex-col justify-center px-10 transition-all duration-200 ease-linear`}
     >
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate className="h-auto">
-          <div className="mb-1 text-3xl font-semibold">Sign up</div>
+          <div className="mb-1 text-3xl font-semibold">注册</div>
           <div className="mb-6 flex items-center justify-between">
             <span>
-              Already have an account? &nbsp;
+              已经有账号? &nbsp;
               <Link
                 href=""
                 className=" font-semibold text-regal-blue hover:underline"
                 onClick={onLogin}
               >
-                Login
+                登录
               </Link>
             </span>
-            <div>
+            {/* <div>
               <Image
                 className="select-none"
                 src="https://minimals.cc/assets/icons/auth/ic_firebase.png"
@@ -87,11 +86,11 @@ export default function RegisterForm({
                 height={40}
                 alt="logo"
               />
-            </div>
+            </div> */}
           </div>
           <TextField
             type="email"
-            placeholder="Email"
+            placeholder="邮箱"
             {...getFieldProps("email")}
             DIVProps={{ className: "mb-4" }}
             errors={Boolean(touched.email && errors.email)}
@@ -99,7 +98,7 @@ export default function RegisterForm({
           />
           <TextField
             type="password"
-            placeholder="Password"
+            placeholder="密码"
             {...getFieldProps("password")}
             DIVProps={{ className: "mb-4" }}
             errors={Boolean(touched.password && errors.password)}
@@ -107,7 +106,7 @@ export default function RegisterForm({
           />
           <TextField
             type="password"
-            placeholder="Confirm Password"
+            placeholder="确认密码"
             {...getFieldProps("confirm_password")}
             errors={Boolean(
               touched.confirm_password && errors.confirm_password

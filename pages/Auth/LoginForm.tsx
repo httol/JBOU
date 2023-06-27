@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import Route from 'next/router'
 import * as Yup from "yup";
-import { ButtonBaseCss } from "../../styles";
 import { Form, FormikProvider, useFormik } from "formik";
 import TextField from "../../components/TextField";
 import styled from "styled-components";
@@ -24,8 +24,8 @@ export default function LoginForm({
   const toaster = useToaster();
   const [errorMessage, setErrorMessage] = useState("");
   const newSchema = Yup.object().shape({
-    email: Yup.string().email("Email is invalid").required("Email is required"),
-    password: Yup.string().required("Password is required"),
+    email: Yup.string().email("邮箱不合法").required("邮箱必填"),
+    password: Yup.string().required("密码必填"),
   });
 
   const formik = useFormik({
@@ -46,6 +46,7 @@ export default function LoginForm({
         );
         setSubmitting(false);
         toaster.success("Login successful");
+        Route.push("dashboard/hello")
       } catch (err: any) {
         setErrorMessage(err.message);
         setSubmitting(false);
@@ -58,25 +59,33 @@ export default function LoginForm({
 
   return (
     <StyledBox
-      className={`flex flex-1 ${
-        active ? "scale-1 translate-x-0" : "-translate-x-[480px] scale-0"
-      } flex-col justify-center px-10 transition-transform duration-200 ease-linear`}
+      className={`flex flex-1 ${active ? "scale-1 translate-x-0" : "-translate-x-[480px] scale-0"
+        } flex-col justify-center px-10 transition-transform duration-200 ease-linear`}
     >
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate>
-          <div className="mb-1 text-3xl font-semibold">Sign in</div>
+          <div className="mb-1 text-3xl font-semibold">登录</div>
           <div className="mb-6 flex items-center justify-between">
             <span>
-              New user? &nbsp;
+              新用户? &nbsp;
               <Link
                 href=""
-                className=" font-semibold text-regal-blue hover:underline"
+                className=" font-semibold hover:underline"
                 onClick={onRegister}
               >
-                Create an account
+                创建账号
+              </Link>
+              &nbsp;
+              &nbsp;
+              <Link
+                href=""
+                className="font-semibold  text-regal-blue hover:underline"
+                onClick={() => toaster.success("功能待集成,敬请期待！！！")}
+              >
+                微信扫码登录
               </Link>
             </span>
-            <div>
+            {/* <div>
               <Image
                 className="select-none"
                 src="https://minimals.cc/assets/icons/auth/ic_firebase.png"
@@ -84,7 +93,7 @@ export default function LoginForm({
                 height={40}
                 alt="logo"
               />
-            </div>
+            </div> */}
           </div>
 
           <TextField
